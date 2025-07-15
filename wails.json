@@ -1,0 +1,10 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "pass_manager",
+  "outputfilename": "pass_manager",
+  "wailsjsdir": "./frontend",
+  "author": {
+    "name": "uginrundkvist",
+    "email": "uginrund@gmail.com"
+  }
+}
