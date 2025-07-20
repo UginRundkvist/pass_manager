@@ -1,33 +1,51 @@
-// Get input + focus
-let nameElement = document.getElementById("name");
-nameElement.focus();
-import './main.css';
+import {Add, Subtract} from "./wailsjs/go/main/Calculator.js";
 
-// Setup the greet function
-window.greet = function () {
-    // Get name
-    let name = nameElement.value;
+console.log("AAA")
 
-    // Check if the input is empty
-    if (name === "") return;
+const num1Input = document.getElementById('num1');
+const num2Input = document.getElementById('num2');
+const addBtn = document.getElementById('addBtn');
+const subtractBtn = document.getElementById('subtractBtn');
+const resultDiv = document.getElementById('result');
 
-    // Call App.Greet(name)
+if (!num1Input || !num2Input || !addBtn || !subtractBtn || !resultDiv) {
+    console.error('Ошибка: Не найдены необходимые HTML-элементы!');
+}
+
+function getNumber(inputElement) {
+    const value = inputElement.value.trim();
+    return value === '' ? 0 : parseInt(value);
+}
+
+function showResult(value, isError = false) {
+    resultDiv.innerHTML = isError
+        ? `<div class="error">Ошибка: ${value}</div>`
+        : `<div class="success">Результат: ${value}</div>`;
+}
+
+addBtn.addEventListener('click', async () => {
     try {
-        window.go.main.App.Greet(name)
-            .then((result) => {
-                // Update result with data back from App.Greet()
-                document.getElementById("result").innerText = result;
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    } catch (err) {
-        console.error(err);
-    }
-};
+        const num1 = getNumber(num1Input);
+        const num2 = getNumber(num2Input);
 
-nameElement.onkeydown = function (e) {
-    if (e.keyCode == 13) {
-        window.greet();
+        const result = await Add(num1, num2);
+
+        showResult(result);
+    } catch (error) {
+        showResult(error.message, true);
+        console.error('Ошибка сложения:', error);
     }
-};
+});
+
+subtractBtn.addEventListener('click', async () => {
+    try {
+        const num1 = getNumber(num1Input);
+        const num2 = getNumber(num2Input);
+
+        const result = await Subtract(num1, num2);
+        showResult(result);
+    } catch (error) {
+        showResult(error.message, true);
+        console.error('Ошибка вычитания:', error);
+    }
+});
